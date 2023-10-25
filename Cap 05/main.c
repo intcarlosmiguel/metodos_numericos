@@ -17,79 +17,38 @@ double F3(double x){
 }
 
 void find_raiz(int metodo,Funcao F,double a,double b){
-    switch (metodo){
-        case 1: // Método da bisceção
-            if(F(a)*F(b) > 0) printf("Não existe mínimo nesse intervalo!");
-            else{
-                double erro = 100;
-                double x = a;
-                double* anterior = calloc(2,sizeof(double));
-                anterior[0] = F(a);
-                anterior[1] = F(b);
-                double x_ = 0;
-                while (anterior[0]*anterior[1] < 0){
-                    
-                    x = (a+b)/2;
-                    if(F(x)*anterior[0] < 0){
-                        anterior[1] = F(x);
-                        erro = fabs((x - x_)/x);
-                        b = x;
-                        
-                    }
-                    if(F(x)*anterior[1] < 0){
-                        anterior[0] = F(x);
-                        erro = fabs((x - x_)/x);
-                        a = x;
-                        
-                    }
-                    
-                    printf("%f %f \n",x,erro);
-                    if(F(x) == 0) break;
-                    if(erro < 0.001) break;
-                    x_ = x;
-                }
+    if(F(a)*F(b) > 0) printf("Não existe mínimo nesse intervalo!");
+    else{
+        double erro = 100;
+        double x = a;
+        double* anterior = calloc(2,sizeof(double));
+        anterior[0] = F(a);
+        anterior[1] = F(b);
+        double x_ = 0;
+        while (anterior[0]*anterior[1] < 0){
+            
+            x = (metodo == 1)? (a+b)/2: b - (anterior[1])*(a - b)/(anterior[0] - anterior[1]);
+            if(F(x)*anterior[0] < 0){
+                anterior[1] = F(x);
+                erro = fabs((x - x_)/x);
+                b = x;
                 
-                printf("\nRaiz = %f\n",x);
-                free(anterior);
             }
-            break;
-        case 2:
-            if(F(a)*F(b) > 0) printf("Não existe mínimo nesse intervalo!");
-            else{
-                double erro = 100;
-                double x = a;
-                double* anterior = calloc(2,sizeof(double));
-                anterior[0] = F(a);
-                anterior[1] = F(b);
-                double x_ = 0;
-                while (anterior[0]*anterior[1] < 0){
-                    
-                    x = b - (anterior[1])*(a - b)/(anterior[0] - anterior[1]);
-                    if(F(x)*anterior[0] < 0){
-                        anterior[1] = F(x);
-                        erro = fabs((x - x_)/x);
-                        b = x;
-                        
-                    }
-                    if(F(x)*anterior[1] < 0){
-                        anterior[0] = F(x);
-                        erro = fabs((x - x_)/x);
-                        a = x;
-                        
-                    }
-                    
-                    printf("%f %f %f\n",x,erro,F(x));
-                    if(F(x) == 0) break;
-                    if(erro < 0.001) break;
-                    x_ = x;
-                }
-                printf("\nRaiz = %f\n",x);
-                free(anterior);
+            if(F(x)*anterior[1] < 0){
+                anterior[0] = F(x);
+                erro = fabs((x - x_)/x);
+                a = x;
+                
             }
-            break;
-        default:
-            printf("Método não encontrado\n");
-            break;
+            
+            printf("%f %f \n",x,erro);
+            if(F(x) == 0) break;
+            if(erro < 0.001) break;
+            x_ = x;
+        }
+        
+        printf("\nRaiz = %f\n",x);
+        free(anterior);
     }
 }
 
